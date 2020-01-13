@@ -1,0 +1,180 @@
+.tabs {
+    --background: #FFFFFF;
+    --text-color: #414856;
+    --color-01: #FFB400;
+    --color-02: #FF5100;
+    --color-03: #9901F8;
+    --width: 300px;
+    --height: 75px;
+    --border-radius: var(--height);
+    background: var(--background);
+    width: var(--width);
+    height: var(--height);
+    padding: 0;
+    position: relative;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(#414856, 0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 15px;
+    box-sizing: border-box;
+
+    label {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--color-01);
+            border-radius: 50%;
+            opacity: var(--opacity, 0);
+            transform: scale(0);
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+
+            .icon {
+                fill: none;
+                stroke: var(--text-color);
+                stroke-dashoffset: 98;
+                stroke-width: 2px;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+
+                @for $icon from 2 through 5 {
+                    $colors: none, var(--color-01), var(--color-02), var(--color-03), var(--color-01);
+
+                    &:nth-child(#{$icon}) {
+                        opacity: 0;
+                        stroke: nth($colors, $icon);
+                        animation-delay: .1s*$icon !important;
+                    }
+                }
+            }
+        }
+    }
+
+    input {
+        display: none;
+
+        &:checked {
+            +label {
+                &::before {
+                    animation: click-animation .4s ease forwards;
+                }
+
+                svg {
+                    .icon {
+                        &:first-child {
+                            animation: stroke-animation-first .5s linear forwards .5s;
+                        }
+
+                        @for $icon from 2 through 4 {
+                            &:nth-child(#{$icon}) {
+                                animation: stroke-animation .5s linear;
+                            }
+                        }
+
+                        &:last-child {
+                            animation: stroke-animation-last .5s linear forwards;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes stroke-animation-first {
+    0% {
+        opacity: 1;
+        stroke-dashoffset: 98;
+        stroke-dasharray: 98 0;
+    }
+
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 0;
+        stroke-dasharray: 0 98;
+    }
+}
+
+@keyframes stroke-animation {
+    0% {
+        opacity: 1;
+        stroke-dashoffset: 98;
+        stroke-dasharray: 0 98 0 0;
+    }
+
+    15% {
+        stroke-dasharray: 0 98 18 0;
+    }
+
+    100% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+        stroke-dasharray: 0 98 18 0;
+    }
+}
+
+@keyframes stroke-animation-last {
+    0% {
+        opacity: 1;
+        stroke-dashoffset: 98;
+        stroke-dasharray: 98 98 18 0;
+    }
+
+    15% {
+        stroke-dasharray: 116 98 18 0;
+    }
+
+    100% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+        stroke-dasharray: 116 98 18 0;
+    }
+}
+
+@keyframes click-animation {
+    50% {
+        transform: scale(4);
+        opacity: .1;
+    }
+}
+
+//--- ## BASIC #############
+body {
+    background: #1B1A23;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .socials {
+        position: fixed;
+        display: block;
+        left: 20px;
+        bottom: 20px;
+
+        >a {
+            display: block;
+            width: 30px;
+            opacity: .2;
+            transform: scale(var(--scale, .8));
+            transition: transform .3s cubic-bezier(0.38, -0.12, 0.24, 1.91);
+
+            &:hover {
+                --scale: 1;
+            }
+        }
+    }
+}
